@@ -1,0 +1,48 @@
+<!--
+		Name: <Yonas Milo>
+		Date: <10/4/2016>
+		Class: CSCI2447, Javascript Fundamentals
+		Project 2
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <title>Whack-A-Mole (CSCI2447)</title>
+
+    <!-- CSS styles: This is for me to worry about; not you. -->
+    <link href="css/game.css" rel="stylesheet" />
+
+</head>
+<body>
+
+<div id="content">
+
+    <h1>Whack-A-Mole</h1>
+
+    <p>After clicking "start", you will have 30 seconds to click
+        as many moles as you can. The moles appear randomly so be ready! </p>
+
+    <div id="controls">
+        <span id="score">0 pts</span>
+        <button type="button" id="start_button">Start!</button>
+    </div>
+
+    <div id="timer">30 seconds left</div>
+
+    <div id="gamespace">
+
+        <img id="mole" src="img/mole.jpg" />
+
+    </div>
+
+</div>
+<script>
+    $(document).ready( function() {
+        $('#content p').html('now you have 20 seconds...');
+
+    });
+</script>
+</body>
+</html>

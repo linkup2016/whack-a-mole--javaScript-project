@@ -1,0 +1,140 @@
+<!-- 
+		Name: <Yonas Milo>
+		Date: <12/14/2016>
+		Class: CSCI2447, Javascript Fundamentals
+		Project 7
+ -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="jQueryUI/jquery-ui.min.js"></script>
+	<link href="jQueryUI/jquery-ui.min.css" rel="stylesheet">
+	<title>Whack-A-Mole (CSCI2447)</title>
+
+	<!-- CSS styles: This is for me to worry about; not you.-->
+	<link href="css/game.css" rel="stylesheet" />
+	<script>
+		var t;
+		var time = 30;
+		var score = 0;
+		var points = 1;
+		var moleCount = 1;
+		var timeInterval = Math.floor((Math.random() * 2000) + 1);
+		var m;
+		var moleList = [];
+
+		$(document).ready( function() {
+			$('#gamespace').css('background-color','#f49dca');
+			$('#start_button').click(function () {
+				start();
+			});
+		});
+
+		function start() {
+			$('#gamespace').css('background-color','#0000ff');
+			$('#timer').show();
+			addMole();
+			keepTime();
+			keepScore();
+		};
+
+    //setTimeOut() and clearTimeOut are opposites. The first one repeats an action and;
+    //the second one stops it.Here the start_button is set to be active as long as the timer didnt hit zero
+
+		function keepTime() {
+			if(time > 0) {
+				time = time - 1;
+				t = setTimeout('keepTime()','1000');
+				$("#start_button").off("click");
+				removeMole();
+			} else {
+				$('#timer').stop();
+				endGame();
+			}
+			$('#timer').html(time + ' seconds left');
+		}
+    //Moles are added to the #gamespace using append() and the moleCount gets track of that. The two random
+    //number generators(generateXpos(), and generateYpos()) provide the coordinates to postion each mole randomly.
+    //The moleCount values are used to name an id for each img added.
+
+		function addMole() {
+			xValue = generateXpos();
+			yValue = generateYpos();
+
+			$('h1').css('color' , '#906fc2');
+			$('#gamespace').append('<img src="img/mole2.png" id ="mole'+moleCount+'" style="top:'+yValue+'px; left:'+xValue+'px;"/>');
+			moleCount++;
+			m = setTimeout('addMole()',timeInterval);
+		}
+    //upon click on img, score increments by one and be shown using html(). img will then be removed.
+		function keepScore() {
+			$('#gamespace').on('click', 'img',function () {
+				score = score + points;
+				$('#score').html(score);
+				$(this).remove();
+			})
+		}
+    //captures the id of every img added using attr() and stores them into an array. provides an index number is
+    // generated randomly to remove the lucky img using fadeOut(). Fade out time is also set to random-->
+		function removeMole() {
+			$('img').each(function () {
+				var mole = $(this).attr("id");
+				moleList.push(mole);
+				var selectMole = Math.floor((Math.random() * moleList.length) + 1);
+				$('#mole'+selectMole).fadeOut(timeInterval);
+			})
+		}
+    //The two clearTimeOut() stop addMole() and keepTime() from repeating. When timer hits zero, the off()
+    //stops the clickabilty of img.-->
+		function endGame() {
+			clearTimeout(m);
+			$("#gamespace").off("click","img");
+			restartGame();
+			clearTimeout(t);
+		}
+    //locaton.reload refreshes the entire page if user clicks OK to the alert box. If not, 'else' executes.-->
+		function restartGame() {
+			var r = confirm("Time is up. Your Score is: " + score +" would you like to play again?");
+			if (r == true) {
+				location.reload();
+			}
+			else {
+				alert("Have a great day!");
+			}
+		}
+    //generates number between 1 and 300.(width)-->
+		function generateYpos() {
+			return Math.floor((Math.random() * 300) + 1);
+		}
+    //generates number between 1 and 500.(height)-->
+		function generateXpos() {
+			return Math.floor((Math.random() * 500) + 1);
+		}
+
+	</script>
+</head>
+<body>
+
+<div id="content">
+
+	<h1>Whack-A-Mole</h1>
+
+	<p>After clicking "start", you will have 30 seconds to click
+		as many moles as you can. The moles appear randomly so be ready! </p>
+
+	<div id="controls">
+		<span id="score">0 pts</span>
+		<button type="button" id="start_button">Start!</button>
+	</div>
+
+	<div id="timer">30 seconds left</div>
+
+	<div id="gamespace">
+
+	</div>
+
+</div>
+</body>
+</html>
